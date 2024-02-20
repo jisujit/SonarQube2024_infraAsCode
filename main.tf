@@ -1,73 +1,28 @@
+/*
+ * File Name: main.tf
+ * Author: Sujit Gangadharan (your.email@example.com)
+ * Date Created: 2024-02-19
+ * Last Modified: 2024-02-19
+ * Description:
+ *   This Terraform configuration sets up an Azure VM in a Spoke virtual network to install SonarQube 
+ */
+
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "3.92.0"
+    }
+  }
+}
+//TODO: Confirm the need for "features"
 provider "azurerm" {
+  # Configuration options
   features {}
 }
 
-resource "azurerm_resource_group" "example" {
-  name     = "sonarqube-rg"
-  location = "West US"
-}
-
-resource "azurerm_virtual_network" "example" {
-  name                = "sonarqube-vnet"
-  address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-}
-
-resource "azurerm_subnet" "example" {
-  name                 = "sonarqube-subnet"
-  resource_group_name  = azurerm_resource_group.example.name
-  virtual_network_name = azurerm_virtual_network.example.name
-  address_prefixes     = ["10.0.1.0/24"]
-}
-
-resource "azurerm_public_ip" "example" {
-  name                = "sonarqube-public-ip"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  allocation_method   = "Static"
-}
-
-resource "azurerm_network_interface" "example" {
-  name                = "sonarqube-nic"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = azurerm_subnet.example.id
-    private_ip_address_allocation = "Dynamic"
-  }
-}
-
-resource "azurerm_virtual_machine" "example" {
-  name                  = "sonarqube-vm"
-  location              = azurerm_resource_group.example.location
-  resource_group_name   = azurerm_resource_group.example.name
-  network_interface_ids = [azurerm_network_interface.example.id]
-  vm_size               = "Standard_DS2_v2"
-
-  storage_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
-  }
-
-  storage_os_disk {
-    name              = "osdisk"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
-  }
-
-  os_profile {
-    computer_name  = "sonarqube-vm"
-    admin_username = "adminuser"
-    admin_password = "Password1234!"
-  }
-
-  os_profile_linux_config {
-    disable_password_authentication = false
-  }
-}
+//TODO: Virtual Network
+//TODO: SonarQube Subnet
+//TODO: VM
+//TODO: NIC with IP address? Difference if internal vs external?
+//TODO: VM for installing MS SQL Server
