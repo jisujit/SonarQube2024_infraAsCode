@@ -22,8 +22,8 @@ provider "azurerm" {
 }
 
 //TODO: Virtual Network
-#https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network
-// Done
+//https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network
+// SG: Added here
 // TODO: SonarQube Subnet
 // TODO: VM
 // TODO: NIC with IP address? Difference if internal vs external?
