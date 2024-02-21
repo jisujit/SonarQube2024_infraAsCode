@@ -19,6 +19,10 @@ terraform {
 provider "azurerm" {
   # Configuration options
   features {}
+  subscription_id = var.subscription_id
+  client_id       = var.client_id
+  client_secret   = var.client_secret
+  tenant_id       = var.tenant_id
 }
 
 //TODO: Virtual Network
@@ -35,16 +39,16 @@ resource "azurerm_resource_group" "SonarQube_rg" {
 }
 
 //SG: what is this SG going to be used for? How can I give a useful name for the nsg_group-type and name?
-resource "azurerm_network_security_group" "example" {
-  name                = "example-security-group"
+resource "azurerm_network_security_group" "SonarQube_nsg" {
+  name                = "sonarqube-security-group"
   location            = azurerm_resource_group.SonarQube_rg.location
   resource_group_name = azurerm_resource_group.SonarQube_rg.name
 }
 
-resource "azurerm_virtual_network" "example" {
-  name                = "example-network"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+resource "azurerm_virtual_network" "SharedVNET" {
+  name                = "shared-network"
+  location            = azurerm_resource_group.SonarQube_rg.location
+  resource_group_name = azurerm_resource_group.SonarQube_rg.name
   address_space       = ["10.0.0.0/16"]
   dns_servers         = ["10.0.0.4", "10.0.0.5"]
 
